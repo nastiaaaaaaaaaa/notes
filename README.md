@@ -8,60 +8,60 @@ window  = QWidget()
 main_width, main_height, = 800, 600
 window.setWindowTitle("Smart_notes")
 window.resize(main_width,main_height)
-window.setStyleSheet('background-color: ; font-size: 16px; color: #000000')
+window.setStyleSheet('background-color:#BD93D8; font-size: 16px; color: #000000')
 
 
 # ------------------------- Ел. інтерфейсу ---------------------------
 text_editor = QTextEdit()             # введення тексту замітки
-text_editor.setStyleSheet('background-color: #b871ff;' )
+text_editor.setStyleSheet('background-color: #9799CA;' )
 text_editor.setPlaceholderText("Введіть текст..") # текст який буде триматись
 
 list_widget1 = QListWidget()          # список заміток
-list_widget1.setStyleSheet('background-color: #ff71ff')
+list_widget1.setStyleSheet('background-color: #B47AEA')
 
 list_widget2 = QListWidget()          # список тегів
-list_widget2.setStyleSheet('background-color: #ff71ff;')
+list_widget2.setStyleSheet('background-color:#FFEE88;')
 
 text_searcher = QLineEdit()           # пошук по тексту
 text_searcher.setPlaceholderText("Введіть текст...")
-text_searcher.setStyleSheet('background-color: #ff71b8')
+text_searcher.setStyleSheet('background-color: #FE5F55')
 
 tag_searcher = QLineEdit()           # пошук по тегу
 tag_searcher.setPlaceholderText("Введіть тег...")
-tag_searcher.setStyleSheet('background-color: #ff71b8')
+tag_searcher.setStyleSheet('background-color: #FE5F55')
 
 # ------------------------- Кпопки ---------------------------
 make_note = QPushButton()
 make_note.setText("Створити замітку")
-make_note.setStyleSheet('background-color: #ff7171')
+make_note.setStyleSheet('background-color: #7BCDBA')
 
 delete_note = QPushButton()
 delete_note.setText("Видалити замітку")
-delete_note.setStyleSheet('background-color: #ff7171')
+delete_note.setStyleSheet('background-color: #7BCDBA')
 
 save_note = QPushButton()
 save_note.setText("Зберегти замітку")
-save_note.setStyleSheet('background-color: #ff7171')
+save_note.setStyleSheet('background-color: #7BCDBA')
 
 add_to_note = QPushButton()
 add_to_note.setText("Додати до замітки")
-add_to_note.setStyleSheet('background-color: #ff7171')
+add_to_note.setStyleSheet('background-color:#F56438')
 
 unpin_to_note = QPushButton()
 unpin_to_note.setText("Відкріпити від замітки")
-unpin_to_note.setStyleSheet('background-color: #ff7171')
+unpin_to_note.setStyleSheet('background-color: #F56438')
 
 search_for_tag = QPushButton()
 search_for_tag.setText("Шукати замітку за тегом")
-search_for_tag.setStyleSheet('background-color: #ff7171')
+search_for_tag.setStyleSheet('background-color: #F19143')
 
 search_for_note = QPushButton()
 search_for_note.setText("Шукати замітку за текстом")
-search_for_note.setStyleSheet('background-color: #ff7171')
+search_for_note.setStyleSheet('background-color: #F19143')
 
 action_theme_btn = QPushButton()
 action_theme_btn.setText("Змінити тему")
-action_theme_btn.setStyleSheet('background-color: #ff7171')
+action_theme_btn.setStyleSheet('background-color: #E69597')
 
 # ------------------------- Розміщення на макет ---------------------------
 row1 = QHBoxLayout()
