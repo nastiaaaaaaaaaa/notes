@@ -224,7 +224,7 @@ def search_note_for_tag():
 
         search_for_tag.text() == "Шукати замітку за тегом"
         list_widget_1.clear()
-        list_widget_1.addIthem(notes,key[])
+        list_widget_1.addIthem(notes.keys())
         list_widget_2.clear()
         text_editor.clear()
 # --------------------[ Зміна теми та експорт в txt формат ] -------------------
@@ -241,11 +241,11 @@ def search_note_for_tag():
 #  підключення обробки подій - функцій до кнопок
 
 make_note.clicked.connect(add_notes)
-delete_note.clicked.connect(delete_note)
-save_note.clicked.connect(save_note)
+delete_note.clicked.connect(delete_notes)
+save_note.clicked.connect(save_notes)
 
 add_to_note.clicked.connect(add_tag)
-unpin_to_note.clicked.connect(delete_note)
+unpin_to_note.clicked.connect(delete_notes)
 search_for_note.cllicked.connect(search_for_note)
 search_for_tag.cllicked.connect(search_note_for_tag)
 
