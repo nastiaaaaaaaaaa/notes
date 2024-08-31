@@ -114,53 +114,148 @@ layout_note.addLayout(col2)
 window.setLayout(layout_note)
 # ------------------------- 
 
-# ________________________Функція програми__________________
-#-------------------------[ Замітки ]-----------------------
-#Отримує текст замітками з виділоною назвою та відображаю його в полі редагування
+# ---------------------------------------------------------[ Функціонал програми ]---------------------------------------------------------------------
+
+
+# ------------------- [ Замітки ] -------------------
+
+#  отримуємо текст із замітки з виділеною назвою та відображаємо його в полі редагування
 def show_notes():
-    global key
-    key = list_widget1.selectedItems() [0].text()   # Дізнаємося на яку записку клікнули
-    list_widget2.cklear()                           # Очищаєо поле з тегами
-    text_editor.setText(notes[key]["text"])         # Відобразили текст з замітками
-    list_widget2.addItems(notes[key]["tag"])        # Відобразили теги замітками
-#Додаємо нову замітки
+    global key                                        # зберігати текст замітки
+    key = list_widget_1.selectedItems()[0].text()     # дізнаємось на яку замітку клікнули
+    list_widget_2.clear()                             # очищаємо поле із тегами
+    text_editor.setText(notes[key]["text"])           # відобразили текст замітки
+    list_widget_2.addItems(notes[key]["tag"])         # відобразили теги замітки
+
+#  додаємо нову замітку 
 def add_notes():
-    note_name, ok =QInputDialog.getText(window,"Додати замітку", "Назва замітки")
+    note_name,ok = QInputDialog.getText(window,'Додати замітку',"Назва замітки")    # - Створити вікно QInputDialog з назвою note_name і зчитати текст
     if note_name and ok:
-        list_widget1.addItem(note_name)
-        notes[note_name] = {"text": "","tag": []}
-    writeToFile()
+        list_widget_1.addItem(note_name)                                            # - Додає замітку до віджету (списку заміток)
+        notes[note_name] = {"text":"","tag":[]}                                     # - Додає до списку notes новий обєкт - але з  пустими поки полями
+    writeToFile()                                                                   # - Викликаємо фукнцію для запису в Json фалу нові замітки
 
-#закріпити замітку
-def deleten_notes():
-    if list_widget1.currentItem():          # Якщо вибирати замітку
-        if key in notes:                    # І є така замітка а словнику notes
-            notes.pop(key)                  # pop видиляє з словника
+#  видалити вибрану замітку 
+def delete_notes():
+    if list_widget_1.currentItem():          # - якщо вибрана замітка
+        if key in notes:                     # - і є така замітка в словнику notes (за ключем)
+            notes.pop(key)                   # - pop видаляє з словника
+            
+            text_editor.clear()              # - очищаємо віджети
+            list_widget_2.clear()
+            list_widget_1.clear()
+            list_widget_1.addItems(notes)    # - оновлюємо віджет списку заміток
+            writeToFile()                    # - перезаписуємо файл
 
-            text_editor.clear()                # Очищаю віджети
-            list_widget2.clear()               
-            list_widget1.clear()               
-            list_widget1.addItems(notes)       # Очищаємо віджети списку замітки
-            writeToFile                        # Перезапусковано файл
-
-#Зберегти в замітках
+#  зберегти замітку 
 def save_notes():
-    if list_widget1.currentItem():                             # Якщо вибрала замітку
-        key = list_widget1.currentItem().text()                # Отримати назву вибраної  замітки
-        notes(key)['text'] = text_editor.toPlainText()         # Записати у словника notes з текст
-        writeToFile                                            # перезапусковано файл
+    if list_widget_1.currentItem():                       # - якщо вибрана замітка
+        key = list_widget_1.currentItem().text()          # - отримати назву вибраної замітки
+        notes[key]['text'] = text_editor.toPlainText()   # - записати у словник notes з текстом з віджену
+        writeToFile()                                     # - перезаписати файл
+
+# шукати по замітці
+def search_for_note():
+
+    text_to_search = text_searcher.text()
+    if search_for_text.text() == 'Шукати замітку за текстом':
+        filtered_notes = {}
+        for key, note_data in notes.items():
+            if text_to_search in note_data['text']:
+                filtered_notes[key] = note_data
+
+        search_for_text.setText('Скинути пошук')
+        list_widget_1.clear()
+        list_widget_1.addItems(filtered_notes.keys())
+        list_widget_2.clear()
+        text_editor.clear()
+
+    elif search_for_text.text() == 'Скинути пошук':
+        search_for_text.setText('Шукати замітку за текстом')
+        list_widget_1.clear()
+        list_widget_1.addItems(notes.keys())
+        list_widget_2.clear()
+        text_editor.clear()
+
+ 
+# ------------------- [ Теги ] -------------------
+
+# додати тег до нотатки
+
+def add_tag():
+    key - list_widget_1.selectedItems()[0].text()
+
+    if key in notes:
+        tag_name, ok = QInputDialog.getText(window, "Додати текст","Назва тегу:")
+        if tag_name and ok:
+            notes[key]["tag"].append(tag_name)
+            writeToFile()
+        
+        tag_searcher.clear()
+        list_widget_2.addItems(notes[key]["tag"])
 
 
-#підключаємо обробку події
-list_widget1.itemClicked.connect(show_notes)
+# видалити тег з нотатки
+def delete_tag():
+    if key in notes:
+        current_item = list_widget_2.currentItem()
+        if current_item:
+            tag_name = current_item.text()
+            notes[key]["tag"].remove(tag_name)
+            list_widget_2.takeIthem(list_widget_2.row(current_item))
+            writeToFile()
 
 
-#-------------------------[ Теги ]-----------------------
+# шукати по тегу
+def search_note_for_tag():
+    tag = tag_searcher.text()
+    if search_for_tag.text() == "Шукати замітку за тегом":
+        filtered_notes = {}
+        for key in notes:
+            if tag in notes[key]["tag"]:
+              filtered_notes[key] = notes[key]
+        search_for_tag.setText("Скинути пошук")
 
-#Зчитати файлів
-with open("notes_data.json", "r") as file: 
+        list_widget_1.clear()
+        list_widget_1.addItem(filtered_notes)
+        list_widget_2.clear()
+        text_editor.clear()
+    elif search_for_tag.text() == "Скинути пошук":
+
+        search_for_tag.text() == "Шукати замітку за тегом"
+        list_widget_1.clear()
+        list_widget_1.addIthem(notes,key[])
+        list_widget_2.clear()
+        text_editor.clear()
+# --------------------[ Зміна теми та експорт в txt формат ] -------------------
+
+
+# ------------------[ Функція для виходу з програми та зуму ]----------------------
+
+
+
+# ------------[ Скорочення клавіші для виходу та зуму або переміщення ] -----------------
+
+
+# ---------------------------------------------------------[ Запуск програми ]---------------------------------------------------------------------
+#  підключення обробки подій - функцій до кнопок
+
+make_note.clicked.connect(add_notes)
+delete_note.clicked.connect(delete_note)
+save_note.clicked.connect(save_note)
+
+add_to_note.clicked.connect(add_tag)
+unpin_to_note.clicked.connect(delete_note)
+search_for_note.cllicked.connect(search_for_note)
+search_for_tag.cllicked.connect(search_note_for_tag)
+
+list_widget_1.itemsClicked.connect(show_notes)
+
+# Зчитати файл
+with open("notes.json", "r") as file:
     notes = json.load(file)
-list_widget1.addItems(notes)
+list_widget_1.addItems(notes) # - відобразити зчитані замітки на віджеті
 
+# --------------------------- Закриття програми та показ
 window.show()
-app.exec()
+app.exec_()
